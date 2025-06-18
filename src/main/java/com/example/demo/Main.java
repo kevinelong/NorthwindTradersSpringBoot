@@ -1,44 +1,38 @@
 package com.example.demo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
+
 @SpringBootApplication
 public class Main {
+
+    public SimpleProductDao data;
+
+    @Autowired
+    Main(SimpleProductDao data) {
+        this.data = data;
+        addProduct("Cheddar", "Cheese", 1.23);
+        showList();
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
 
-}
-
-class Product{
-    Integer productId;
-    String name;
-    String Category; //for now
-    Double price;
-}
-
-interface IProductDAO{
-    public void add(Product product);
-    public ArrayList<Product> getAll();
-}
-
-@Component
-class SimpleProductDao implements IProductDAO{
-    ArrayList<Product> list = new ArrayList<Product>();
-    SimpleProductDao(){
-        this.list.add(new Product());
+    public void addProduct(String name, String category, Double price) {
+        data.add(new Product(name, category, price));
     }
-    public void add(Product product){
 
-    }
-    public ArrayList<Product> getAll(){
-        ArrayList<Product> list = new ArrayList<Product>();
-        //TODO populate
-        return list;
+    public void showList() {
+        var list = this.data.getAll();
+        for (var p : list) {
+            System.out.println(p);
+        }
     }
 }
 /*
